@@ -1,0 +1,2 @@
+recursive-include ModelicaModels/build *
+recursive-include ModelicaModels/ *.mo

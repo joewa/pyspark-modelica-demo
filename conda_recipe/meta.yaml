@@ -1,0 +1,36 @@
+{% set PACKAGE_NAME = "pymodelicademo" %}
+{% set PACKAGE_VERSION = "0.0.1" %}
+
+package:
+  name: "{{ PACKAGE_NAME }}"
+  version: "{{ PACKAGE_VERSION }}"
+
+source:
+  path: ../src
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - omcompiler
+    - cmake
+    - future
+    - psutil
+    - pyparsing
+    - pandas
+
+  run:
+    - python
+    - pandas
+    - future
+    - pyparsing
+    - psutil
+
+build:
+  script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt
+
+about:
+  home: https://github.com/joewa
+  license: BSD 3-clause
+  license_file: LICENSE
+  summary: 'Demonstration of the usage of pyspark & pandas to run Modelica models on scale.'
