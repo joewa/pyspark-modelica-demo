@@ -4,12 +4,7 @@ import distutils.cmd
 import setuptools
 import setuptools.command.build_py
 import pkg_resources
-#import setuptools.setup
-#import setuptools.find_packages
-#import setuptools.command.build_py
-
-
-SETUP_DIR = pkg_resources.resource_filename(__name__, ".")
+from ModelicaBuildTools import build_script
 
 
 class BuildModelsCommand(distutils.cmd.Command):
@@ -34,24 +29,7 @@ class BuildModelsCommand(distutils.cmd.Command):
 
   def run(self):
     """Run command."""
-    from ModelicaModels.BouncingBall import buildmodel
-    destination_folder = os.path.join(SETUP_DIR, 'ModelicaModels', 'build', "BouncingBall")
-    try:
-        os.makedirs(destination_folder)
-        files2delete = [f for f in os.listdir(destination_folder) if os.path.isfile(f)]
-        for f in files2delete:
-            os.remove(os.path.join(destination_folder, f))
-    except FileExistsError:
-        # directory already exists
-        pass
-    files_before_build = set([f for f in os.listdir(SETUP_DIR) if os.path.isfile(f)])
-    mod = buildmodel()
-    files_after_build = set([f for f in os.listdir(SETUP_DIR) if os.path.isfile(f)])
-    files_new = files_after_build.difference(files_before_build)
-    for f in files_new:
-        #print(f)
-        if not os.path.isfile(os.path.join(destination_folder, f)) :
-            shutil.move(f, destination_folder)
+    build_script()
     # self.model_exefile = mod.xmlFile
     #command = ['/usr/bin/pylint']
     #if self.model_exefile:
@@ -88,7 +66,8 @@ setuptools.setup(
         'psutil',
         'future',
         'pandas>=0.23',
-        'numpy>=1.17'
+        'numpy>=1.17',
+        'DyMat'
     ],
     #extras_require={'plotting': ['matplotlib>=2.2.0', 'jupyter']},
     # setup_requires=['psutil'],  # 'omcompiler>=1.18' (nicht gefunden) 'pytest-runner', 'flake8', 

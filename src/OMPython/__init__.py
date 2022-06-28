@@ -63,7 +63,8 @@ if sys.platform == 'darwin':
     sys.path.append('/opt/openmodelica/lib/python2.7/site-packages/')
 
 # TODO: replace this with the new parser
-from OMPython import OMTypedParser, OMParser
+# from OMPython import OMTypedParser, OMParser
+from . import OMTypedParser, OMParser
 
 __license__ = """
  This file is part of OpenModelica.
