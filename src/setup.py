@@ -59,15 +59,17 @@ setuptools.setup(
         'buildmodels': BuildModelsCommand,
         'build_py': BuildPyCommand,
     },
-    packages=setuptools.find_packages(include=['OMPython', 'ModelicaModels', 'ModelicaModels.*']),
+    packages=setuptools.find_packages(include=[
+        'OMPython', 'DyMat', 'DyMat.Export',
+        'ModelicaModels', 'ModelicaModels.*'
+    ]),
     include_package_data=True,  # Takes what is defined in MANIFEST.in
     package_data={'ModelicaModels': ['ModelicaModels/build/*/*',]},
     install_requires=[
         'psutil',
         'future',
         'pandas>=0.23',
-        'numpy>=1.17',
-        'DyMat'
+        'numpy>=1.17'
     ],
     #extras_require={'plotting': ['matplotlib>=2.2.0', 'jupyter']},
     # setup_requires=['psutil'],  # 'omcompiler>=1.18' (nicht gefunden) 'pytest-runner', 'flake8', 
