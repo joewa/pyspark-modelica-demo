@@ -2,6 +2,7 @@ import pkg_resources
 import pandas as  pd
 import os
 import sys
+import tempfile
 
 import OMPython  # import ModelicaSystem
 import DyMat
@@ -22,11 +23,12 @@ def dymat2pandas(dm, block, names) -> pd.DataFrame:
 
 def run_sim(mod, parameters, res_vars=None, pathname=None) -> pd.DataFrame:
     """Simulation of a single run. The unique run identifier is in the column run_key."""
+    temp_dir = tempfile.gettempdir()
     grp = parameters['run_key'].iloc[0]
     resfilename = grp + '.mat'
-    resfilepathname = os.path.join(pathname, resfilename)
+    resfilepathname = os.path.join(temp_dir, resfilename)
     mod.setParameters(parameters['modifiers'])
-    mod.simulate(resultfile=resfilename, simflags=None)
+    mod.simulate(resultfile=resfilepathname, simflags=None)
     # Collect results
     if isinstance(res_vars, tuple):
         res_vars = list(res_vars)
@@ -35,7 +37,7 @@ def run_sim(mod, parameters, res_vars=None, pathname=None) -> pd.DataFrame:
         ts_df = dymat2pandas(dm, 2, res_vars)
     except:
         ts_df = pd.DataFrame(columns=['time'] + res_vars, data=[[-1.0 ,0.0, 0.0]])
-    os.remove(resfilepathname)
+    # os.remove(resfilepathname)
     ts_df.columns = ['time'] + res_vars
     ts_df['run_key'] = grp
     return ts_df

@@ -28,9 +28,13 @@ def build_script(setup_dir=None):
     files_before_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
     mod = buildmodel()
     files_after_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
+    # raise ValueError('omc stdout:' + str(mod) + '\nFiles' + str(files_after_build))
     files_new = files_after_build.difference(files_before_build)
     for f in files_new:
         #print(f)
         if not os.path.isfile(os.path.join(destination_folder, f)) :
-            shutil.move(f, destination_folder)
+            # shutil.move(f, destination_folder)
+            shutil.copy(f, destination_folder)
+            os.remove(os.path.join(cwd, f))
+
     pass

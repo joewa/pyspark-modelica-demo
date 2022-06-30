@@ -18,16 +18,17 @@ def create_mos_file():
 
 
 def run_mos_file():
-    os.popen("omc " + mosfn).read()
-    pass
+    # r = os.popen("omc " + mosfn).read()
+    r = os.popen("omc " + mosfn).readlines()
+    return r
 
 
 def buildmodel():
     # return ModelicaSystem(fileName=fn, modelName=modelname, useCorba=False)
     # return ModelicaSystem(fileName=fn, modelName="BouncingBall", useCorba=True)
     create_mos_file()
-    run_mos_file()
-    pass
+    r = run_mos_file()
+    return r
 
 
 def instantiatemodel():

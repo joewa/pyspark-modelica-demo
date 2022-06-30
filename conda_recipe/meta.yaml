@@ -13,7 +13,12 @@ requirements:
     - python
     - setuptools
     - omcompiler
-    - cmake
+    - libiconv           # required by omcompiler (if not already present on the host)
+    - gcc_linux-64       # required by omcompiler (if not already present on the host)
+    - gxx_linux-64       # required by omcompiler (if not already present on the host)
+    - gfortran_linux-64  # required by omcompiler (if not already present on the host)
+    - make               # required by omcompiler (if not already present on the host)
+    - cmake              # required by omcompiler (if not already present on the host)
     - future
     - psutil
     - pyparsing
