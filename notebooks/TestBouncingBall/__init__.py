@@ -10,10 +10,6 @@ import DyMat
 from ModelicaModels import BouncingBall
 
 
-# sys.path.insert(0, '../src')
-# sys.path.insert(0, '/home/joerg/miniforge3/lib/python3.9/site-packages/ModelicaModels/build/BouncingBall/BouncingBall/')
-
-
 def dymat2pandas(dm, block, names) -> pd.DataFrame:
     ts_df = pd.DataFrame(dm.getVarArray(names)).T
     #ts_df['time'] = dm.abscissa(2)
@@ -28,7 +24,9 @@ def run_sim(mod, parameters, res_vars=None, pathname=None) -> pd.DataFrame:
     resfilename = grp + '.mat'
     resfilepathname = os.path.join(temp_dir, resfilename)
     mod.setParameters(parameters['modifiers'])
-    mod.simulate(resultfile=resfilepathname, simflags=None)
+    out = mod.simulate(resultfile=resfilepathname, simflags=None)
+    print('The model returned:')
+    print(out)
     # Collect results
     if isinstance(res_vars, tuple):
         res_vars = list(res_vars)

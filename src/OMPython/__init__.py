@@ -1264,6 +1264,7 @@ class ModelicaSystem(object):
         else:
             getExeFile = os.path.join(os.getcwd(), self.modelName).replace("\\", "/")
 
+        out = None
         if (os.path.exists(getExeFile)):
             cmd = getExeFile + override + csvinput + r + simflags
             #print(cmd)
@@ -1276,13 +1277,18 @@ class ModelicaSystem(object):
                 p.wait()
                 p.terminate()
             else:
-                os.system(cmd)
+                # os.system(cmd)  # Original code
+                # p = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+                p = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                # p = subprocess.run([getExeFile, r], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                out = p.stdout # .read()
             self.simulationFlag = True
             if self.xmlFileName is not None:
                 os.chdir(cwd_current)
 
         else:
             raise Exception("Error: application file not generated yet")
+        return out
 
 
     # to extract simulation results
