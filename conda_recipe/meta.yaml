@@ -30,7 +30,7 @@ requirements:
     - future
     - pyparsing
     - psutil
-    - omcompiler
+    #- omcompiler
     - scipy
 
 build:

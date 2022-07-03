@@ -1,5 +1,6 @@
 import pkg_resources
 import os
+import sys
 import shutil
 
 
@@ -36,5 +37,25 @@ def build_script(setup_dir=None):
             # shutil.move(f, destination_folder)
             shutil.copy(f, destination_folder)
             os.remove(os.path.join(cwd, f))
+
+    # Copy omc runtime
+    omc_lib_path = os.path.join(sys.prefix, 'lib', 'x86_64-linux-gnu', 'omc')
+    omc_lib_files_list = os.listdir(omc_lib_path)
+    omc_lib_files_list = [os.path.join(omc_lib_path, f) for f in os.listdir(omc_lib_path)]
+    omc_lib_files_list = [f for f in omc_lib_files_list if os.path.isfile(f)]
+    if len(omc_lib_files_list) == 0:
+        raise FileNotFoundError('Openmodelica runtime libs not found in ' + omc_lib_path)
+    omc_lib_dest_dir = os.path.join(setup_dir, 'omcsimruntime')
+    try:
+        os.makedirs(omc_lib_dest_dir)
+        files2delete = [f for f in os.listdir(omc_lib_dest_dir) if os.path.isfile(f)]
+        for f in files2delete:
+            os.remove(os.path.join(omc_lib_dest_dir, f))
+    except FileExistsError:
+        # directory already exists
+        pass
+    for f in omc_lib_files_list:
+        #print(f)
+        shutil.copy(f, omc_lib_dest_dir)
 
     pass

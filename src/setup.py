@@ -61,10 +61,11 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(include=[
         'OMPython', 'DyMat', 'DyMat.Export',
-        'ModelicaModels', 'ModelicaModels.*'
+        'ModelicaModels', 'ModelicaModels.*',
+
     ]),
     include_package_data=True,  # Takes what is defined in MANIFEST.in
-    package_data={'ModelicaModels': ['ModelicaModels/build/*/*',]},
+    package_data={'ModelicaModels': ['ModelicaModels/build/*/*', 'omcsimruntime/*']},
     install_requires=[
         'psutil',
         'future',
