@@ -30,8 +30,9 @@ requirements:
     - future
     - pyparsing
     - psutil
-    #- omcompiler
     - scipy
+    - omcompiler
+    - sysroot_linux-64
 
 build:
   script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt

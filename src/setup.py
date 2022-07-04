@@ -1,10 +1,19 @@
+import glob
 import os
+import sys
 import shutil
 import distutils.cmd
 import setuptools
 import setuptools.command.build_py
+import setuptools.command.build_ext
+import pathlib
 import pkg_resources
 from ModelicaBuildTools import build_script
+
+
+suffix = '.so'
+SETUP_DIR = pkg_resources.resource_filename(__name__, ".")
+omc_lib_path = os.path.join(SETUP_DIR, 'omcsimruntime')
 
 
 class BuildModelsCommand(distutils.cmd.Command):
@@ -58,14 +67,19 @@ setuptools.setup(
     cmdclass={
         'buildmodels': BuildModelsCommand,
         'build_py': BuildPyCommand,
+        #'build_ext': CustomExtBuilder,
+        #'build_ext': my_build_ext,
     },
     packages=setuptools.find_packages(include=[
-        'OMPython', 'DyMat', 'DyMat.Export',
+        'OMPython', 'DyMat', 'DyMat.Export',  # 'omcsimruntime',
         'ModelicaModels', 'ModelicaModels.*',
-
     ]),
     include_package_data=True,  # Takes what is defined in MANIFEST.in
-    package_data={'ModelicaModels': ['ModelicaModels/build/*/*', 'omcsimruntime/*']},
+    package_data={
+        'ModelicaModels': ['ModelicaModels/build/*/*'],
+    },
+    data_files=[(os.path.join(sys.prefix, 'lib'), glob.glob('omcsimruntime/*'))],
+
     install_requires=[
         'psutil',
         'future',

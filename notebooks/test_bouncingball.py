@@ -7,10 +7,10 @@
 #   - hoffe dass sie dann gefunden werden
 import shutil
 import os
-omcpath = shutil.which('omc')
-if omcpath.endswith('/bin/omc'):
-    omcpath = omcpath[:-7]
-print(omcpath)  # /home/joerg/miniforge3/envs/testpackage/bin/omc
+#omcpath = shutil.which('omc')
+#if omcpath.endswith('/bin/omc'):
+#    omcpath = omcpath[:-7]
+#print(omcpath)  # /home/joerg/miniforge3/envs/testpackage/bin/omc
 # die libs sind in /home/joerg/miniforge3/envs/testpackage/lib/x86_64-linux-gnu/omc/
 
 
@@ -19,7 +19,7 @@ print(sys.prefix)
 omc_lib_path = os.path.join(sys.prefix, 'lib', 'x86_64-linux-gnu', 'omc')
 print(omc_lib_path)
 
-print(omc_lib_files_list)
+# print(omc_lib_files_list)
 
 # sys.path.insert(0, '../src')
 import TestBouncingBall

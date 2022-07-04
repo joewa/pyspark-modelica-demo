@@ -37,6 +37,7 @@ def build_script(setup_dir=None):
             # shutil.move(f, destination_folder)
             shutil.copy(f, destination_folder)
             os.remove(os.path.join(cwd, f))
+    pass
 
     # Copy omc runtime
     omc_lib_path = os.path.join(sys.prefix, 'lib', 'x86_64-linux-gnu', 'omc')
