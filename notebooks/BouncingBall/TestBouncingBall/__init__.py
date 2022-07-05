@@ -1,5 +1,5 @@
 import pkg_resources
-import pandas as  pd
+import pandas as pd
 import os
 import sys
 import tempfile
@@ -17,59 +17,67 @@ def dymat2pandas(dm, block, names) -> pd.DataFrame:
     return ts_df
 
 
-def run_sim(mod, parameters, res_vars=None, pathname=None) -> pd.DataFrame:
+def run_sim(parameters, res_vars=None) -> pd.DataFrame:
     """Simulation of a single run. The unique run identifier is in the column run_key."""
+    mod = BouncingBall.instantiatemodel()
+    log_str = ''
+    print(parameters)
     temp_dir = tempfile.gettempdir()
     grp = parameters['run_key'].iloc[0]
     resfilename = grp + '.mat'
     resfilepathname = os.path.join(temp_dir, resfilename)
     mod.setParameters(parameters['modifiers'])
-    out = mod.simulate(resultfile=resfilepathname, simflags=None)
-    print('The model returned:')
-    print(out)
+    log_str += str(mod.simulate(resultfile=resfilepathname, simflags=None))
     # Collect results
     if isinstance(res_vars, tuple):
         res_vars = list(res_vars)
     try:
         dm = DyMat.DyMatFile(resfilepathname)
         ts_df = dymat2pandas(dm, 2, res_vars)
-    except:
+        os.remove(resfilepathname)
+    except Exception as e:
         ts_df = pd.DataFrame(columns=['time'] + res_vars, data=[[-1.0 ,0.0, 0.0]])
-    # os.remove(resfilepathname)
     ts_df.columns = ['time'] + res_vars
     ts_df['run_key'] = grp
     return ts_df
 
 
-def get_sim_dist_func(mod, res_vars=None):
+def get_sim_dist_func(res_vars=None):
     """Return the pandas (udf) function to simulate a set of runs."""
-    pathname = pkg_resources.resource_filename(BouncingBall.__name__, '../build/BouncingBall')
-    # pathname = os.path.join(os.path.dirname(BouncingBall.__file__), '../build/BouncingBall')
-    print(pathname)
     def run_sim_dist(parameters) -> pd.DataFrame():
-        return run_sim(mod, parameters, res_vars=res_vars, pathname=pathname)
+        return run_sim(parameters, res_vars=res_vars)
     return run_sim_dist
 
 
-def run_bouncingball_pandas():
-    mod = BouncingBall.instantiatemodel()
-    sim_options_d = mod.getSimulationOptions()
-    sim_options_d['stopTime'] = 2
-    mod.setSimulationOptions(sim_options_d)
-    print('Default parameters for model Bouncingall')
-    print(mod.getParameters())
+def run_bouncingball_pandas(parameters_var_df) -> pd.DataFrame:
+    # mod = BouncingBall.instantiatemodel()
+    # sim_options_d = mod.getSimulationOptions()
+    # sim_options_d['stopTime'] = 2
+    # mod.setSimulationOptions(sim_options_d)
+    # print('Default parameters for model Bouncingall')
+    # print(mod.getParameters())
 
     # Paramtric simulation
     ## Sequential execution (with pandas)
     ### Definition of model parameters
-    parameters_var_df = pd.DataFrame(columns=['run_key', 'modifiers'], data=[
-        ['r1', ['e=0.7']],
-        ['r2', ['e=0.5']],
-        ['r3', ['e=0.9']],
-    ])
 
     # Running the parametric simulation
     ts_all_df = parameters_var_df.groupby(['run_key']).apply(
-            get_sim_dist_func(mod, res_vars=['h','v'])
+            get_sim_dist_func(res_vars=['h', 'v'])
+        )
+    return ts_all_df
+
+
+def run_bouncingball_spark(parameters_var_df):
+    from pyspark.sql import types as T
+    res_schema = T.StructType([
+        T.StructField("time", T.DoubleType(), True),
+        T.StructField("h", T.DoubleType(), True),
+        T.StructField("v", T.DoubleType(), True),
+        T.StructField("time", T.StringType(), True),
+    ])
+    # Running the parametric simulation
+    ts_all_df = parameters_var_df.groupby(['run_key']).applyInPandas(
+            get_sim_dist_func(res_vars=['h', 'v']), schema=res_schema
         )
     return ts_all_df
