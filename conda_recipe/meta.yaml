@@ -31,7 +31,7 @@ requirements:
     - pyparsing
     - psutil
     - scipy
-    - omcompiler
+    # - omcompiler
     - sysroot_linux-64
 
 build:
