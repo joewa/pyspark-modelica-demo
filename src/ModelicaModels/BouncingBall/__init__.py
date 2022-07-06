@@ -3,7 +3,7 @@ import pkg_resources
 from OMPython import ModelicaSystem
 
 
-modelname = "BouncingBall"
+modelName = "BouncingBall"
 fn = pkg_resources.resource_filename(__name__, "BouncingBall.mo")
 mosfn = fn + 's'
 
@@ -12,7 +12,7 @@ def create_mos_file():
     mos_file = open(mosfn, 'w', 1)
     mos_file.write('loadFile("' + fn + '");\n')
     # mos_file.write('setComponentModifierValue(CalledbyPython,b,$Code(="+str(newb)+"));\n')
-    mos_file.write('buildModel(' + modelname + ');\n')
+    mos_file.write('buildModel(' + modelName + ');\n')
     mos_file.close()
     pass
 
@@ -32,9 +32,12 @@ def buildmodel():
 
 
 def instantiatemodel():
-    xmlfn = pkg_resources.resource_filename(__name__, "../build/BouncingBall/BouncingBall_init.xml")
+    xmlfn = pkg_resources.resource_filename(
+            __name__,
+            os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+        )
     mod = ModelicaSystem(
-            fileName=fn, modelName="BouncingBall",
+            fileName=fn, modelName=modelName,
             xmlFileName=xmlfn
         )
     return mod
