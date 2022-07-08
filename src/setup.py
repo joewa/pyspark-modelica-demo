@@ -68,12 +68,10 @@ setuptools.setup(
     cmdclass={
         'buildmodels': BuildModelsCommand,
         'build_py': BuildPyCommand,
-        #'build_ext': CustomExtBuilder,
-        #'build_ext': my_build_ext,
     },
     packages=setuptools.find_packages(include=[
-        'OMPython', 'DyMat', 'DyMat.Export',  # 'omcsimruntime',
-        'ModelicaModels', 'ModelicaModels.*',
+        'OMPython', 'DyMat', 'DyMat.Export',
+        'ModelicaRuntimeTools', 'ModelicaModels', 'ModelicaModels.*',
     ]),
     include_package_data=True,  # Takes what is defined in MANIFEST.in
     package_data={

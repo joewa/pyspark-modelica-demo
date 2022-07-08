@@ -1279,6 +1279,7 @@ class ModelicaSystem(object):
             else:
                 # os.system(cmd)  # Original code
                 # p = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+                print(str(cmd))
                 p = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 # p = subprocess.run([getExeFile, r], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 out = p.stdout # .read()

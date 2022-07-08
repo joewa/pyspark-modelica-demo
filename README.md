@@ -20,3 +20,7 @@ or to create a fresh environment, `modelicatestenv`, run:
 
     conda create -n modelicatestenv python=3.9 pymodelicademo -c ./build
 
+or to create a fresh environment that has matplotlib and Jupyterlab for the notebooks, run:
+
+    conda create -n packtest python=3.9 jupyterlab pyarrow matplotlib pymodelicademo -c ./build
+

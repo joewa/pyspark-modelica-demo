@@ -6,6 +6,10 @@ from OMPython import ModelicaSystem
 modelName = "BouncingBall"
 fn = pkg_resources.resource_filename(__name__, "BouncingBall.mo")
 mosfn = fn + 's'
+xmlfn_global = pkg_resources.resource_filename(
+        __name__,
+        os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+    )
 
 
 def create_mos_file():
@@ -31,11 +35,14 @@ def buildmodel():
     return r
 
 
-def instantiatemodel():
-    xmlfn = pkg_resources.resource_filename(
-            __name__,
-            os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
-        )
+def instantiatemodel(use_local=True):
+    if use_local:
+        xmlfn = pkg_resources.resource_filename(
+                __name__,
+                os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+            )
+    else:
+        xmlfn = xmlfn_global
     mod = ModelicaSystem(
             fileName=fn, modelName=modelName,
             xmlFileName=xmlfn
