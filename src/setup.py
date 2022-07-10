@@ -9,7 +9,7 @@ import setuptools.command.build_ext
 import pathlib
 import pkg_resources
 from ModelicaBuildTools import build_script
-from ModelicaModels import BouncingBall
+from ModelicaModels import BouncingBall, EDrives
 
 
 suffix = '.so'
@@ -40,6 +40,7 @@ class BuildModelsCommand(distutils.cmd.Command):
   def run(self):
     """Run command."""
     build_script(BouncingBall)
+    build_script(EDrives)
     # self.model_exefile = mod.xmlFile
     #command = ['/usr/bin/pylint']
     #if self.model_exefile:
