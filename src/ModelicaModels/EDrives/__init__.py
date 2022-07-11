@@ -6,9 +6,12 @@ from OMPython import ModelicaSystem
 modelName = "EDrives.Examples.DCDC.HBridge_DC_Drive"
 fn = pkg_resources.resource_filename(
     __name__,
-    os.path.join("EDrives", "Examples", "DCDC", "HBridge_DC_Drive.mo")
+    os.path.join("EDrives", "package.mo")
     )
-mosfn = fn + 's'
+mosfn = pkg_resources.resource_filename(
+    __name__,
+    modelName + ".mos"
+    )
 xmlfn_global = pkg_resources.resource_filename(
         __name__,
         os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
@@ -17,6 +20,9 @@ xmlfn_global = pkg_resources.resource_filename(
 
 def create_mos_file():
     mos_file = open(mosfn, 'w', 1)
+    # TODO: check if alread
+    mos_file.write('installPackage(Modelica, "3.2.3");')
+    mos_file.write('getErrorString();')
     mos_file.write('loadModel(Modelica);\n')
     mos_file.write('loadFile("' + fn + '");\n')
     # mos_file.write('setComponentModifierValue(CalledbyPython,b,$Code(="+str(newb)+"));\n')
