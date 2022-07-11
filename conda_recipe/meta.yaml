@@ -6,7 +6,14 @@ package:
   version: "{{ PACKAGE_VERSION }}"
 
 source:
-  path: ../src
+  - path: ../src
+  # https://libraries.openmodelica.org/index/v1/index.json
+  # Modelica "version": "3.2.3+maint.om",
+  - url: https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/e68d7a0317c565ee00c1b8d44c527979ea0304bf.zip
+  # Complex "version": "4.0.0+maint.om",
+  #- url: https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/c11123102e94d4b5acb139331a6d85f45d8adcc0.zip
+  # ModelicaServices "version": "4.0.0+maint.om",
+  #- url: https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/c11123102e94d4b5acb139331a6d85f45d8adcc0.zip
 
 requirements:
   build:
@@ -34,8 +41,12 @@ requirements:
     # - omcompiler
     - sysroot_linux-64
 
-build:
-  script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt
+# build:
+#   script_env:
+#     # - OPENMODELICAHOME=$CONDA_PREFIX
+#     - MODELICAPATH=$PREFIX  # $CONDA_PREFIX
+
+#   script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt
 
 about:
   home: https://github.com/joewa

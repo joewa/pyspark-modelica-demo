@@ -41,7 +41,7 @@ class BuildModelsCommand(distutils.cmd.Command):
     """Run command."""
     build_script(BouncingBall)
     r = build_script(EDrives)
-    raise ValueError('omc stdout:' + str(r))
+    # raise ValueError('omc stdout:' + str(r))
     # self.model_exefile = mod.xmlFile
     #command = ['/usr/bin/pylint']
     #if self.model_exefile:
