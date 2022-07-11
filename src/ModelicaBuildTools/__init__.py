@@ -64,4 +64,4 @@ def build_script(modelwrapper, cwd=None, cleanup=False, copy_files=True):
             #else:
             shutil.copy(f, omc_lib_dest_dir)
 
-    pass
+    return mod
