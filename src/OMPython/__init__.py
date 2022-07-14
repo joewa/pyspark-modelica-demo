@@ -1206,13 +1206,27 @@ class ModelicaSystem(object):
             return ([self.optimizeOptions.get(x,"NotExist") for x in names])
 
     # to simulate or re-simulate model
-    def simulate(self,resultfile=None,simflags=None):  # 11
+    def simulate(self,resultfile=None,simflags=None,overrideaux=None):  # 11
         """
         This method simulates model according to the simulation options.
+
+        Parameters
+        ----------
+        resultfile : str or None
+            Output file name
+
+        simflags : str or None
+            Other simulation options not '-override' parameters
+
+        overrideaux : str or None
+            Specify 'outputFormat' and 'variableFilter
+
         usage
+        -----
         >>> simulate()
         >>> simulate(resultfile="a.mat")
         >>> simulate(simflags="-noEventEmit -noRestart -override=e=0.3,g=10) set runtime simulation flags
+        >>> simulate(simflags="-noEventEmit -noRestart" ,overrideaux="outputFormat=csv,variableFilter=.*") 
         """
         if(resultfile is None):
             r=""
@@ -1234,6 +1248,12 @@ class ModelicaSystem(object):
             override =" -override=" + values1
         else:
             override =""
+        # add override flags not parameters or simulation options
+        if overrideaux:
+            if override:
+                override = override + "," + overrideaux
+            else:
+                override = " -override=" + overrideaux
 
         if (self.inputFlag):  # if model has input quantities
             for i in self.inputlist:
@@ -1250,7 +1270,7 @@ class ModelicaSystem(object):
                 if val[0][0] < float(self.simulateOptions["startTime"]):
                     print('Input time value is less than simulation startTime for inputs', i)
                     return
-            self.__simInput()  # create csv file
+            # self.__simInput()  # create csv file  # commented by Joerg
             csvinput=" -csvInput=" + self.csvFile
         else:
             csvinput=""
