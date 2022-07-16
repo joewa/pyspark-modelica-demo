@@ -39,9 +39,11 @@ class BuildModelsCommand(distutils.cmd.Command):
 
   def run(self):
     """Run command."""
-    build_script(BouncingBall)
-    r = build_script(EDrives)
-    # raise ValueError('omc stdout:' + str(r))
+    r = str(build_script(BouncingBall, "BouncingBall"))
+    r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Switching"))
+    r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Continuous"))
+    if 'Error' in r:
+      raise ValueError('omc stdout:' + str(r))
     # self.model_exefile = mod.xmlFile
     #command = ['/usr/bin/pylint']
     #if self.model_exefile:
@@ -52,7 +54,7 @@ class BuildModelsCommand(distutils.cmd.Command):
     #    level=distutils.log.INFO)
     #subprocess.check_call(command)
 
- 
+
 class BuildPyCommand(setuptools.command.build_py.build_py):
   """Custom build command: Build all models when calling pyton setup.py build"""
   def run(self):

@@ -27,7 +27,7 @@ def run_mos_file():
     return r
 
 
-def buildmodel():
+def buildmodel(modelName):
     # return ModelicaSystem(fileName=fn, modelName=modelname, useCorba=False)
     # return ModelicaSystem(fileName=fn, modelName="BouncingBall", useCorba=True)
     create_mos_file()

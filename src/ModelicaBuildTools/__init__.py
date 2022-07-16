@@ -7,14 +7,14 @@ import shutil
 SETUP_DIR = pkg_resources.resource_filename(__name__, "../")
 
 
-def build_script(modelwrapper, cwd=None, cleanup=False, copy_files=True):
+def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=True):
     if cwd is None:
         setup_dir = SETUP_DIR
         cwd = SETUP_DIR
     else:
         setup_dir = SETUP_DIR
         cwd = cwd  # os.getcwd()
-    destination_folder = os.path.join(setup_dir, 'ModelicaModels', 'build', modelwrapper.modelName)
+    destination_folder = os.path.join(setup_dir, 'ModelicaModels', 'build', modelName)
     if copy_files:
         try:
             os.makedirs(destination_folder)
@@ -25,7 +25,7 @@ def build_script(modelwrapper, cwd=None, cleanup=False, copy_files=True):
             # directory already exists
             pass
         files_before_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
-    mod = modelwrapper.buildmodel()
+    mod = modelwrapper.buildmodel(modelName)
     if copy_files:
         files_after_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
         # raise ValueError('omc stdout:' + str(mod) + '\nFiles' + str(files_after_build))
