@@ -1,6 +1,16 @@
 # pyspark-modelica-demo
 Demonstration of the usage of pyspark &amp; pandas to run Modelica models on scale.
 
+## Background
+Apache Spark, particularly Pyspark, became the Foundation of Big Data analytics and machine learning.
+Clusters. Simulation.
+```python
+# Running the parametric simulation
+ts_sim_sdf = parameters_var_sdf.groupby(['run_key']).applyInPandas(
+        get_sim_dist_func(BouncingBall, res_vars=['h', 'v'], use_local=True), schema=res_schema,
+    ).cache()
+```
+
 ## Building and installing the conda package
 Go to the `conda-recipe` and run
 
