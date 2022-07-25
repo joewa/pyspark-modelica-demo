@@ -4,9 +4,23 @@ Demonstration of the usage of pyspark &amp; pandas to run Modelica models on sca
 ## Background
 Apache Spark, particularly Pyspark, became the Foundation to run Big Data analytics and heavy machine learning tasks on scalable computation clusters. OpenModelica enables the simulation of physics and systems in the real world real world using (differential-algebraic) equations and discrete events.
 
-THe idea of this demo is, to provide groups (or runs) of input data, e.g. timeseries and parameters, to Modelica models, execute the simulation model for each group of data in parallel and then collect the resulting timeseries in a Spark DataFrame again.
+In a nutshell, the idea of this demo is:
+- Provide groups (or runs) of input data as a Spark DataFrame, `input_df`, (e.g. timeseries and/or parameters) to Modelica models.
+- Then execute the simulation model for each group of data in parallel.
+- Finally collect the resulting timeseries in a Spark DataFrame again.
+This can be achieved with the follwing pattern:
+```python
+ts_sim_df = input_df.groupby(['run_key']).applyInPandas(run_func, schema=r)
+```
+Where `run_func` is a Python function which:
+- Gets a pandas dataframe of input data for a single run.
+- Drops the input data as a file in the (local) temporary directory
+- Optionally compiles the model executable if the structure of the model is dynamically changeable
+- Calls the model executable which drops the simulation results in the (local) temporary directory
+- Reads the simulation results and returns them as a pandas dataframe.
 
-A simple example is the model of a bouncing ball.
+## A simple example
+This is the model of a bouncing ball:
 ```modelica
 model BouncingBall
   parameter Real e=0.7 "coefficient of restitution";
@@ -31,13 +45,16 @@ equation
   end when;
 end BouncingBall;
 ```
-The challenge could be a parametric simulation with the following input data.
+So the model has two parameters (the coefficient of restitution, e and the gravity accesleration, g) and no timeseries inputs. The challenge could be a parametric simulation with the following input data.
 ```python
 # Running the parametric simulation
 ts_sim_df = input_df.groupby(['run_key']).applyInPandas(
         get_sim_func(BouncingBall, res_vars=['h', 'v']), schema=res_schema
     )
 ```
+
+## Deploying jobs in a cloud computing platform using conda
+[Anaconda](https://anaconda.org) is the "The World's Most Popular Data Science Platform" and the [OpenModelica compiler is available as a conda package](https://anaconda.org/conda-forge/omcompiler) too.
 
 ## Building and installing the conda package
 Go to the `conda-recipe` and run
