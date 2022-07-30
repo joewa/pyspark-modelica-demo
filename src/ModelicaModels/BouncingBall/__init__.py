@@ -35,7 +35,7 @@ def buildmodel(modelName):
     return r
 
 
-def instantiatemodel(use_local=True):
+def instantiatemodel(modelName, use_local=True):
     if use_local:
         xmlfn = pkg_resources.resource_filename(
                 __name__,
@@ -43,6 +43,10 @@ def instantiatemodel(use_local=True):
             )
     else:
         xmlfn = xmlfn_global
+    if not os.path.isfile(xmlfn): 
+        xmlfn = "./" + modelName + "_init.xml"
+        if not os.path.isfile(xmlfn):
+            raise FileNotFoundError("{}".format(str(xmlfn)))
     mod = ModelicaSystem(
             fileName=fn, modelName=modelName,
             xmlFileName=xmlfn
