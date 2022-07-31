@@ -18,6 +18,7 @@ Where `run_func` is a Python function which:
 - Optionally compiles the model executable if the structure of the model is dynamically changeable
 - Calls the model executable which drops the simulation results in the (local) temporary directory
 - Reads the simulation results and returns them as a pandas dataframe.
+
 Finally, the model can be deployed on a ***cluster*** as a conda package for large scale analytics.
 - Build and compile the model once.
 - Create a ***conda*** package.
