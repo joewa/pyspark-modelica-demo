@@ -55,9 +55,13 @@ So the model has two parameters (the coefficient of restitution, e and the gravi
 ```python
 # Running the parametric simulation
 ts_sim_df = input_df.groupby(['run_key']).applyInPandas(
-        get_sim_func(BouncingBall, res_vars=['h', 'v']), schema=res_schema
+        get_sim_func(BouncingBall, 'BouncingBall', res_vars=['h', 'v']), schema=res_schema
     )
 ```
+where `BouncingBall` is a Python package that serves as an entry point to the model next to `BouncingBall.mo` or `package.mo`. It implements the following methods:
+- `create_mos_file()` to create a Modelica script file to build the models.
+- `run_mos_file()` to call `omc` with the Modelica script file and return stdout and stderr. The result is the models executables with the `modelNames_init.xml` files.
+- `instantiatemodel('BouncingBall')` to instantiate OMPython's `ModelicaSystem` with the parameter `xmlFileName` which tells ModelicaSystem to use the pre-build model as described in `BouncingBall_init.xml`.
 
 ## Deploying the models on a cluster using conda
 [Anaconda](https://anaconda.org) is the "The World's Most Popular Data Science Platform" and the [OpenModelica compiler is available as a conda package](https://anaconda.org/conda-forge/omcompiler) too. `conda-build` is used to create a conda package of the model according to the recipe from `meta.yaml`.
