@@ -9,7 +9,7 @@ from ModelicaModels import BouncingBall
 def run_bouncingball_pandas(parameters_var_df) -> pd.DataFrame:
     # Running the parametric simulation
     ts_all_df = parameters_var_df.groupby(['run_key']).apply(
-            get_sim_dist_func(BouncingBall, res_vars=['h', 'v'])
+            get_sim_dist_func(BouncingBall, 'BouncingBall', res_vars=['h', 'v'])
         )
     return ts_all_df
 
@@ -24,6 +24,6 @@ def run_bouncingball_spark(parameters_var_df):
     ])
     # Running the parametric simulation
     ts_all_df = parameters_var_df.groupby(['run_key']).applyInPandas(
-            get_sim_dist_func(BouncingBall, res_vars=['h', 'v']), schema=res_schema
+            get_sim_dist_func(BouncingBall, 'BouncingBall', res_vars=['h', 'v']), schema=res_schema
         )
     return ts_all_df
