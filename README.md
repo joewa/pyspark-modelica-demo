@@ -80,8 +80,8 @@ or to create a fresh environment that has matplotlib and Jupyterlab for the note
 
 ## Workflow
 - The development of a model and the required analytics is done a conda environment `modelicadevenv` which has `omcompiler`, `pandas` and your favourite conda packages to develop interactively.
-    - For the BouncingBall example, see the notebook [dev_interactive_omc.ipynb)](notebooks/BouncingBall/dev_interactive_omc/dev-interactive-omc.ipynb).
-    - For the EDrives example, see the notebook [dev_interactive_omc.ipynb)](notebooks/EDrives/dev_interactive_omc/dev-interactive-omc.ipynb).
+    - For the BouncingBall example, see the notebook [dev_interactive_omc.ipynb)](notebooks/BouncingBall/dev_interactive_omc/dev-interactive-omc.ipynb)
+    - For the EDrives example, see the notebook [dev_interactive_omc.ipynb)](notebooks/EDrives/dev_interactive_omc/dev-interactive-omc.ipynb)
 - Create a [recipe](conda_recipe/meta.yaml), build a package using `conda-build` and create a fresh environment that contains the package. Building packages and creating fresh environments will take a while. Do it only when you have seen thing working in `modelicadevenv`.
 - Activate the fresh environment and test the package.
     - For the BouncingBall example, see the notebook [test_integration.ipynb)](notebooks/BouncingBall/test_integration.ipynb) and the script [test_pandas.py](notebooks/BouncingBall/test_pandas.py).
