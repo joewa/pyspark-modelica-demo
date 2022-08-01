@@ -41,7 +41,7 @@ It implements the following methods:
 - `instantiatemodel('EDrives.Examples.DCDC.DC_Drive_Switching')` to instantiate OMPython's `ModelicaSystem` with the parameter `xmlFileName` which tells ModelicaSystem to use the pre-build model as described in `EDrives.Examples.DCDC.DC_Drive_Switching_init.xml`.
 
 ## Demo examples
-- [BouncingBall](notebooks/BouincingBall/README.md) is one of the most simple and famous Modelica examples.
+- [BouncingBall](notebooks/BouncingBall/README.md) is one of the most simple and famous Modelica examples.
 - EDrives, is a more complex example of a package that depends on the [Modelica Standard Library](https://github.com/modelica/ModelicaStandardLibrary).
 
 ## Deploying the models on a cluster using conda
