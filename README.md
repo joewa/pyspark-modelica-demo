@@ -26,15 +26,19 @@ The *entry point* is a small Python package which is placed next to the Modelica
 ```python
 # Running the parametric simulation
 ts_sim_df = input_df.groupby(['run_key']).applyInPandas(
-        get_sim_func(EDrives, 'BouncingBall', res_vars=['h', 'v']), schema=res_schema
+        get_sim_func(
+                EDrives, 'EDrives.Examples.DCDC.DC_Drive_Switching', 
+                res_vars=['dcpm.wMechanical', 'constantVoltage.i', 'dcpm.brush.i', 'torque.tau', 'hBridge.ref']
+            ),
+        schema=res_schema
     )
 ```
 where `EDrives` is a Python package that serves as an entry point to the model with a fixed relative location next to `package.mo`.
 
 It implements the following methods:
 - `create_mos_file()` to create a Modelica script file to build the models.
-- `run_mos_file()` to call `omc` with the Modelica script file and return stdout and stderr. The result is the models executables with the `modelNames_init.xml` files.
-- `instantiatemodel('BouncingBall')` to instantiate OMPython's `ModelicaSystem` with the parameter `xmlFileName` which tells ModelicaSystem to use the pre-build model as described in `BouncingBall_init.xml`.
+- `run_mos_file()` to call `omc` with the Modelica script file and return stdout and stderr. The result is the models executables with the `modelNames_init.xml` files, e.g. `EDrives.Examples.DCDC.DC_Drive_Switching_init.xml`.
+- `instantiatemodel('EDrives.Examples.DCDC.DC_Drive_Switching')` to instantiate OMPython's `ModelicaSystem` with the parameter `xmlFileName` which tells ModelicaSystem to use the pre-build model as described in `EDrives.Examples.DCDC.DC_Drive_Switching_init.xml`.
 
 ## Demo examples
 - [BouncingBall](notebooks/BouincingBall/README.md) is one of the most simple and famous Modelica examples.
