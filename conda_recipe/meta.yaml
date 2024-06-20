@@ -1,5 +1,5 @@
 {% set PACKAGE_NAME = "pymodelicademo" %}
-{% set PACKAGE_VERSION = "0.0.1" %}
+{% set PACKAGE_VERSION = "0.0.2" %}
 
 package:
   name: "{{ PACKAGE_NAME }}"

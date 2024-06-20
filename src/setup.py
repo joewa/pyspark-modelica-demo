@@ -9,7 +9,8 @@ import setuptools.command.build_ext
 import pathlib
 import pkg_resources
 from ModelicaBuildTools import build_script
-from ModelicaModels import BouncingBall, EDrives
+from MM import BouncingBall
+from MM import EDrives
 
 
 suffix = '.so'
@@ -39,9 +40,9 @@ class BuildModelsCommand(distutils.cmd.Command):
 
   def run(self):
     """Run command."""
-    r = str(build_script(BouncingBall, "BouncingBall"))
-    r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Switching"))
+    r = str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Switching"))
     r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Continuous"))
+    r += str(build_script(BouncingBall, "BouncingBall"))
     if 'Error' in r:
       raise ValueError('omc stdout:' + str(r))
     # self.model_exefile = mod.xmlFile
@@ -64,7 +65,7 @@ class BuildPyCommand(setuptools.command.build_py.build_py):
 
 setuptools.setup(
     name='pymodelicademo',
-    version='0.0.1',
+    version='0.0.2',
     description='Running Modelica models as a Python package',
     author='Joerg Wangemann',
     author_email='joerg.wangemann@gmail.com',
@@ -75,18 +76,18 @@ setuptools.setup(
     },
     packages=setuptools.find_packages(include=[
         'OMPython', 'DyMat', 'DyMat.Export',
-        'ModelicaRuntimeTools', 'ModelicaModels', 'ModelicaModels.*',
+        'ModelicaRuntimeTools', 'MM', 'MM.*',
     ]),
     include_package_data=True,  # Takes what is defined in MANIFEST.in
     package_data={
-        'ModelicaModels': ['ModelicaModels/build/*/*'],
+        'MM': ['MM/build/*/*'],
     },
     data_files=[(os.path.join(sys.prefix, 'lib'), glob.glob('omcsimruntime/*'))],
 
     install_requires=[
         'psutil',
         'future',
-        'pandas>=0.23',
+        'pandas>=1.5',
         'numpy>=1.17'
     ],
     #extras_require={'plotting': ['matplotlib>=2.2.0', 'jupyter']},

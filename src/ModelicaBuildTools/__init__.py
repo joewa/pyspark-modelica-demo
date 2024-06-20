@@ -14,14 +14,15 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
     else:
         setup_dir = SETUP_DIR
         cwd = cwd  # os.getcwd()
-    destination_folder = os.path.join(setup_dir, 'ModelicaModels', 'build', modelName)
+    # destination_folder = os.path.join(setup_dir, 'MM', 'build', modelName)
+    destination_folder = os.path.join(setup_dir, 'MM', 'build')
     if copy_files:
         try:
             os.makedirs(destination_folder)
             files2delete = [f for f in os.listdir(destination_folder) if os.path.isfile(f)]
             for f in files2delete:
                 os.remove(os.path.join(destination_folder, f))
-        except FileExistsError:
+        except FileExistsError as e:
             # directory already exists
             pass
         files_before_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
@@ -30,18 +31,21 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
         files_after_build = set([f for f in os.listdir(cwd) if os.path.isfile(f)])
         # raise ValueError('omc stdout:' + str(mod) + '\nFiles' + str(files_after_build))
         files_new = files_after_build.difference(files_before_build)
+        # print(files_new)
         for f in files_new:
             #print(f)
             if cleanup & os.path.isfile(os.path.join(destination_folder, f)):
                 os.remove(os.path.join(destination_folder, f))
             if not os.path.isfile(os.path.join(destination_folder, f)):
                 # shutil.move(f, destination_folder)
-                # print('Copy ' + f + ' -> ' + destination_folder)
+                print('CopyMy ' + f + ' -> ' + destination_folder)
                 shutil.copy(f, destination_folder)
+                # print("copy file {} to {}".format(f, destination_folder))
                 os.remove(os.path.join(cwd, f))
 
         # Copy omc runtime
-        omc_lib_path = os.path.join(sys.prefix, 'lib', 'x86_64-linux-gnu', 'omc')
+        # omc_lib_path = os.path.join(sys.prefix, 'lib', 'x86_64-linux-gnu', 'omc')
+        omc_lib_path = os.path.join(sys.prefix, 'lib', 'omc')
         omc_lib_files_list = os.listdir(omc_lib_path)
         omc_lib_files_list = [os.path.join(omc_lib_path, f) for f in os.listdir(omc_lib_path)]
         omc_lib_files_list = [f for f in omc_lib_files_list if os.path.isfile(f)]

@@ -39,7 +39,8 @@ def instantiatemodel(modelName, use_local=True):
     if use_local:
         xmlfn = pkg_resources.resource_filename(
                 __name__,
-                os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+                # os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+                os.path.join("..", "build", modelName + "_init.xml")
             )
     else:
         xmlfn = xmlfn_global
