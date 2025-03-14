@@ -21,7 +21,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys, importlib
+import sys
+import importlib
 
 formats = {
     'CSV' :       'Comma separated values - read by many spreadsheet programs',
@@ -41,22 +42,20 @@ def export(fmt, dm, varList, fileName=None, formatOptions={}):
     format string, `varList` the list of variables to export. If no `fileName` is 
     given, it will be derived from the mat file name. `formatOptions` will be used 
     in later versions.
-
     :Arguments:
         - string: fmt
         - DyMolaMat object: dm
         - sequence of strings: varList
         - optional string: fileName
         - optional dictionary: formatOptions
-        
+
     :Returns:
         - None
     """
     if not fmt in formats:
         raise Exception('Unknown export format specified!')
-    
+
     if not fmt in loadedFormats:
         loadedFormats[fmt] = importlib.import_module('.%s' % fmt, package='DyMat.Export')
 
     return loadedFormats[fmt].export(dm, varList, fileName,formatOptions)
-

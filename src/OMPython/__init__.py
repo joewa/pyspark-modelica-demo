@@ -41,6 +41,7 @@ import getpass
 import logging
 import json
 import os
+import stat
 import platform
 import psutil
 import re
@@ -48,6 +49,7 @@ import shlex
 import signal
 import subprocess
 import sys
+import shlex
 import tempfile
 import time
 import uuid
@@ -850,7 +852,7 @@ class ModelicaSystem(object):
         self.resultfile="" # for storing result file
         self.variableFilter = variableFilter
 
-        if not os.path.exists(self.fileName):  # if file does not eixt
+        if (not os.path.exists(self.fileName)) and (xmlFileName is None):  # if file does not eixt
             print("File Error:" + os.path.abspath(self.fileName) + " does not exist!!!")
             return
 
@@ -867,7 +869,10 @@ class ModelicaSystem(object):
                 print("Error: File does not exist!!!")
 
         else:
-            os.chdir(self.modelDir)
+            try:
+                os.chdir(self.modelDir)
+            except:
+                print("Error: Directory does not exist!!!")
             file_ = os.path.exists(self.fileName_)
             self.model = self.fileName_[:-3]
             if (self.fileName_):  # execution from different path
@@ -1296,6 +1301,9 @@ class ModelicaSystem(object):
 
         out = None
         if (os.path.exists(getExeFile)):
+            if not os.access(getExeFile, os.X_OK):
+                st = os.stat(getExeFile)
+                os.chmod(getExeFile, st.st_mode, stat.S_IEXEC)
             cmd = getExeFile + override + csvinput + r + simflags
             #print(cmd)
             if (platform.system() == "Windows"):
@@ -1310,8 +1318,7 @@ class ModelicaSystem(object):
                 # os.system(cmd)  # Original code
                 # p = subprocess.Popen([cmd], stdout=subprocess.PIPE)
                 print(str(cmd))
-                p = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                # p = subprocess.run([getExeFile, r], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                p = subprocess.run(shlex.split(cmd), shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 out = p.stdout # .read()
             self.simulationFlag = True
             if self.xmlFileName is not None:

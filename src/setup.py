@@ -1,5 +1,6 @@
 import glob
 import os
+import subprocess
 import sys
 import shutil
 import distutils.cmd
@@ -40,20 +41,15 @@ class BuildModelsCommand(distutils.cmd.Command):
 
   def run(self):
     """Run command."""
-    r = str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Switching"))
+    if os.path.join(sys.prefix, 'bin') not in os.environ['PATH']:
+        os.environ['PATH'] += os.pathsep + os.path.join(sys.prefix, 'bin')
+    r = str(build_script(BouncingBall, "BouncingBall"))
+    r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Switching"))
     r += str(build_script(EDrives, "EDrives.Examples.DCDC.DC_Drive_Continuous"))
-    r += str(build_script(BouncingBall, "BouncingBall"))
+    r += str(subprocess.run("env | grep PATH", shell=True, capture_output=True, text=True))
+
     if 'Error' in r:
       raise ValueError('omc stdout:' + str(r))
-    # self.model_exefile = mod.xmlFile
-    #command = ['/usr/bin/pylint']
-    #if self.model_exefile:
-    #  command.append('--rcfile=%s' % self.model_exefile)
-    #command.append(os.getcwd())
-    #self.announce(
-    #    'Running command: %s' % str(command),
-    #    level=distutils.log.INFO)
-    #subprocess.check_call(command)
 
 
 class BuildPyCommand(setuptools.command.build_py.build_py):
@@ -78,9 +74,8 @@ setuptools.setup(
         'OMPython', 'DyMat', 'DyMat.Export',
         'ModelicaRuntimeTools', 'MM', 'MM.*',
     ]),
-    include_package_data=True,  # Takes what is defined in MANIFEST.in
     package_data={
-        'MM': ['MM/build/*/*'],
+        'MM': ['MM/build/*'],
     },
     data_files=[(os.path.join(sys.prefix, 'lib'), glob.glob('omcsimruntime/*'))],
 

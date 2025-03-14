@@ -1,3 +1,0 @@
-recursive-include MM/build *
-recursive-include MM/ *.mo
-recursive-include omcsimruntime/ *

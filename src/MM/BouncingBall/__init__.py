@@ -1,4 +1,6 @@
 import os
+import sys
+import subprocess
 import pkg_resources
 from OMPython import ModelicaSystem
 
@@ -8,7 +10,7 @@ fn = pkg_resources.resource_filename(__name__, "BouncingBall.mo")
 mosfn = fn + 's'
 xmlfn_global = pkg_resources.resource_filename(
         __name__,
-        os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
+        os.path.join("..", "build") + "/" + modelName + "_init.xml"
     )
 
 
@@ -22,9 +24,10 @@ def create_mos_file():
 
 
 def run_mos_file():
-    # r = os.popen("omc " + mosfn).read()
-    r = os.popen("omc " + mosfn).readlines()
-    return r
+    # r = os.popen("omc " + mosfn).readlines()
+    # return r
+    r = subprocess.run(os.path.join(sys.prefix, 'bin', 'omc') + " " + mosfn, shell=True, capture_output=True, text=True)
+    return {'stdout': r.stdout, 'stderr': r.stderr}
 
 
 def buildmodel(modelName):
@@ -35,7 +38,7 @@ def buildmodel(modelName):
     return r
 
 
-def instantiatemodel(modelName, use_local=True):
+def instantiatemodel(use_local=True, force_executable_path=None):
     if use_local:
         xmlfn = pkg_resources.resource_filename(
                 __name__,
@@ -44,12 +47,11 @@ def instantiatemodel(modelName, use_local=True):
             )
     else:
         xmlfn = xmlfn_global
-    if not os.path.isfile(xmlfn): 
-        xmlfn = "./" + modelName + "_init.xml"
-        if not os.path.isfile(xmlfn):
-            raise FileNotFoundError("{}".format(str(xmlfn)))
+    if force_executable_path is not None:
+        xmlfn = os.path.join(force_executable_path, modelName + "_init.xml")
     mod = ModelicaSystem(
             fileName=fn, modelName=modelName,
             xmlFileName=xmlfn
         )
+    print("fn:" + fn + " xmlfn:" + xmlfn)
     return mod

@@ -21,7 +21,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import locale, os
+import locale
+import os
+
 
 def export(dm, varList, fileName=None, formatOptions={}):
     """Export DyMat data to a CSV file using locale number formatting"""
@@ -29,11 +31,11 @@ def export(dm, varList, fileName=None, formatOptions={}):
     if not fileName:
         fileName = dm.fileName+'.l.csv'
     oFile = open(fileName, 'w')
-    
+
     locale.setlocale(locale.LC_NUMERIC, locale.getdefaultlocale())
     delimiter = formatOptions.get('delimiter', ';')
     newline   = formatOptions.get('newline', os.linesep)
-    
+
     vDict = dm.sortByBlocks(varList)
     for vList in vDict.values():
         vData = dm.getVarArray(vList)
@@ -41,5 +43,5 @@ def export(dm, varList, fileName=None, formatOptions={}):
         oFile.write(delimiter.join(['"%s"'%n for n in vList])+newline)
         for i in range(vData.shape[1]):
             oFile.write(delimiter.join([locale.format('%g', n) for n in vData[:,i]])+newline)
-    
+
     oFile.close()

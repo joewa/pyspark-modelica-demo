@@ -29,12 +29,14 @@ requirements:
     - future
     - psutil
     - pyparsing
+    - numpy 1.23.5
     - pandas
     - omsl 3.2.3
 
   run:
     - python
     - pandas
+    - openblas
     - future
     - pyparsing
     - psutil
@@ -42,12 +44,8 @@ requirements:
     # - omcompiler
     - sysroot_linux-64
 
-# build:
-#   script_env:
-#     # - OPENMODELICAHOME=$CONDA_PREFIX
-#     - MODELICAPATH=$PREFIX  # $CONDA_PREFIX
-
-#   script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt
+build:
+  script: python setup.py build && python setup.py install --single-version-externally-managed --record=record.txt
 
 about:
   home: https://github.com/joewa

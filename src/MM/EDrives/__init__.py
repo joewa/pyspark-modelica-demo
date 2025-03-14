@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import pkg_resources
 from OMPython import ModelicaSystem
@@ -18,7 +19,7 @@ def get_mosfn(modelName):
 
 xmlfn_global = pkg_resources.resource_filename(
         __name__,
-        os.path.join("..", "build", "MYMODEL") + "/" + "MYMODEL" + "_init.xml"
+        os.path.join("..", "build") + "/" + "MYMODEL" + "_init.xml"
     )
 
 
@@ -44,9 +45,10 @@ def create_mos_file(mofile, modelName, mosfn, install_msl=False, load_msl=False)
 
 
 def run_mos_file(mosfn):
-    # r = os.popen("omc " + mosfn).read()
-    r = os.popen("omc " + mosfn).readlines()
-    return r
+    # r = os.popen("omc " + mosfn).readlines()
+    # return r
+    r = subprocess.run(os.path.join(sys.prefix, 'bin', 'omc') + " " + mosfn, shell=True, capture_output=True, text=True)
+    return {'stdout': r.stdout, 'stderr': r.stderr}
 
 
 def buildmodel(modelName):

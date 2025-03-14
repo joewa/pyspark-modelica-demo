@@ -33,10 +33,10 @@ class NameConverter:
     allow0 = string.ascii_letters + string.digits + '_'
     allow  = allow0 + '@+-.'
     repl   = '_'
-    
+
     def __init__(self):
         self.used_names = []
-        
+
     def __call__(self, name):
         n = list(name)
         if not n[0] in self.allow0:
@@ -50,12 +50,12 @@ class NameConverter:
         self.used_names.append(s)
         return s
 
-    
+
 def export(dm, varList, fileName=None, formatOptions={}):
     """Export DyMat data to a netCDF file using netCDF4"""
 
     if nc is None:
-      raise Exception("netCDF4 support not found - please install python-netCDF4!")
+        raise Exception("netCDF4 support not found - please install python-netCDF4!")
 
     if not fileName:
         fileName = dm.fileName+'.nc'
@@ -67,7 +67,7 @@ def export(dm, varList, fileName=None, formatOptions={}):
 
     if convertNames:
         nameConv = NameConverter()
-    
+
     vList = dm.sortByBlocks(varList)
     for block in vList:
         a, aname, adesc = dm.abscissa(block)

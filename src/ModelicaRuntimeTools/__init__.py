@@ -83,7 +83,7 @@ def run_sim_parametric(pdf, modelwrapper_name=None, model_name=None, res_vars=No
         pdf = pdf[['time']+list(mod.getInputs().keys())]
         # Write csv file and tell the model class
         mod.csvFile = os.path.join(temp_dir, mod.modelName + '_' + grp + '_inputs.csv')
-        pdf.to_csv(mod.csvFile, sep=',', line_terminator=',\n')
+        pdf.to_csv(mod.csvFile, sep=',', lineterminator=',\n')
         mod.inputFlag = True
         if 'stopTime' in mod.overridevariables:
             stopTime = float(mod.overridevariables.pop('stopTime'))
@@ -113,7 +113,8 @@ def run_sim_parametric(pdf, modelwrapper_name=None, model_name=None, res_vars=No
         ts_df = dymat2pandas(dm, 2, res_vars)
         #os.remove(resfilepathname)
     except Exception as e:
-        ts_df = pd.DataFrame(columns=['time'] + res_vars, data=[[-1.0 ,0.0, 0.0]])
+        raise ValueError("Error when calling dymat2pandas: Exception: {0};\n Log from simulate: {1}".format(str(e), log_str))
+        # ts_df = pd.DataFrame(columns=['time'] + res_vars, data=[[-1.0 ,0.0, 0.0]])
     ts_df.columns = ['time'] + res_vars
     ts_df['run_key'] = grp
     # print(ts_df.head(3))

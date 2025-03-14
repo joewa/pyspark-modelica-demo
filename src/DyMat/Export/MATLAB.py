@@ -23,6 +23,7 @@
 
 import scipy.io
 
+
 def export(dm, varList, fileName=None, formatOptions={}):
     """Export DyMat data to a simple MATLAB file"""
 
@@ -30,7 +31,7 @@ def export(dm, varList, fileName=None, formatOptions={}):
         fileName = dm.fileName+'.mat'
 
     vList = dm.sortByBlocks(varList)
-    
+
     md = {}
     for block in vList:
         for n in vList[block]:

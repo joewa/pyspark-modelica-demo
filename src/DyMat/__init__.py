@@ -102,7 +102,6 @@ class DyMatFile:
             
     def blocks(self):
         """Returns the numbers of all data blocks.
-
         :Arguments:
             - None
         :Returns:
@@ -113,7 +112,6 @@ class DyMatFile:
     def names(self, block=None):
         """Returns the names of all variables. If block is given, only variables of this 
         block are listed.
-
         :Arguments:
             - optional block: integer
         :Returns:
@@ -126,7 +124,6 @@ class DyMatFile:
 
     def data(self, varName):
         """Return the values of the variable.
-
         :Arguments:
             - varName: string
         :Returns:
@@ -143,7 +140,6 @@ class DyMatFile:
 
     def block(self, varName):
         """Returns the block number of the variable.
-
         :Arguments:
             - varName: string
         :Returns:
@@ -153,7 +149,6 @@ class DyMatFile:
 
     def description(self, varName):
         """Returns the description string of the variable.
-
         :Arguments:
             - varName: string
         :Returns:
@@ -164,7 +159,6 @@ class DyMatFile:
     def sharedData(self, varName):
         """Return variables which share data with this variable, possibly with a different 
         sign.
-
         :Arguments:
             - varName: string
         :Returns:
@@ -175,7 +169,6 @@ class DyMatFile:
 
     def size(self, blockOrName):
         """Return the number of rows (time steps) of a variable or a block.
-
         :Arguments:
             - integer (block) or string (variable name): blockOrName
         :Returns:
@@ -191,7 +184,6 @@ class DyMatFile:
     def abscissa(self, blockOrName, valuesOnly=False):
         """Return the values, name and description of the abscissa that belongs to a 
         variable or block. If valuesOnly is true, only the values are returned.
-
         :Arguments:
             - integer (block) or string (variable name): blockOrName
             - optional bool: valuesOnly
@@ -213,7 +205,6 @@ class DyMatFile:
         """Sort a list of variables by the block number, return a dictionary whose keys 
         are the block numbers and the values are lists of names. All variables in one 
         list will have the same number of values.
-
         :Arguments:
             - list of strings: varList
         :Returns:
@@ -232,7 +223,6 @@ class DyMatFile:
         elements are separated by dots. The tree will represent the structure of the 
         Modelica models. The tree is returned as a dictionary of dictionaries. The keys 
         are the path elements, values are sub-dictionaries or variable names.
-
         :Arguments:
             - None
         :Returns:
@@ -253,7 +243,6 @@ class DyMatFile:
         """Return the values of all variables in varNames combined as a 2d-array. If 
         withAbscissa is True, include abscissa's values first. 
         **All variables must share the same block!**
-
         :Arguments:
             - sequence of strings: varNames
             - optional bool: withAbscissa
@@ -269,7 +258,6 @@ class DyMatFile:
     def writeVar(self, varName):
         """Write the values of the abscissa and the variabale to stdout. The text format 
         is compatible with gnuplot. For more options use DyMat.Export instead.
-
         :Arguments:
             - string: varName
         :Returns:
@@ -284,4 +272,3 @@ class DyMatFile:
 
 # for compatibility with old versions
 DymolaMat = DyMatFile
-

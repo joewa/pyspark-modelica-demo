@@ -31,10 +31,10 @@ def export(dm, varList, fileName=None, formatOptions={}):
     vDict = dm.sortByBlocks(varList)
     for blk in vDict.keys():
         vList = vDict[blk]
-        
+
         nd = [(n, dm.description(n)) for n in vList]
         nd.insert(0, dm._absc)
-        
+
         oFile = open('%s.%02d' % (fileName, blk), 'w')
         oFile.write('### file generated with DyMat from %s\n' % dm.fileName)
         for i in range(len(nd)):
