@@ -1301,11 +1301,10 @@ class ModelicaSystem(object):
 
         out = None
         if (os.path.exists(getExeFile)):
-            if not os.access(getExeFile, os.X_OK):
+            if not os.access(getExeFile, os.X_OK):  # ensure that executable permission is set
                 st = os.stat(getExeFile)
-                os.chmod(getExeFile, st.st_mode, stat.S_IEXEC)
+                os.chmod(getExeFile, st.st_mode | stat.S_IEXEC)
             cmd = getExeFile + override + csvinput + r + simflags
-            #print(cmd)
             if (platform.system() == "Windows"):
                 omhome = os.path.join(os.environ.get("OPENMODELICAHOME"))
                 dllPath = os.path.join(omhome, "bin").replace("\\", "/") + os.pathsep + os.path.join(omhome, "lib/omc").replace("\\", "/") + os.pathsep + os.path.join(omhome, "lib/omc/cpp").replace("\\", "/") +  os.pathsep + os.path.join(omhome, "lib/omc/omsicpp").replace("\\", "/")

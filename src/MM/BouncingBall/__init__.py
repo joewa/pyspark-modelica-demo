@@ -26,6 +26,7 @@ def create_mos_file():
 def run_mos_file():
     # r = os.popen("omc " + mosfn).readlines()
     # return r
+    # r = subprocess.run("omc " + mosfn, shell=True, capture_output=True, text=True)
     r = subprocess.run(os.path.join(sys.prefix, 'bin', 'omc') + " " + mosfn, shell=True, capture_output=True, text=True)
     return {'stdout': r.stdout, 'stderr': r.stderr}
 
@@ -42,7 +43,6 @@ def instantiatemodel(use_local=True, force_executable_path=None):
     if use_local:
         xmlfn = pkg_resources.resource_filename(
                 __name__,
-                # os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
                 os.path.join("..", "build", modelName + "_init.xml")
             )
     else:

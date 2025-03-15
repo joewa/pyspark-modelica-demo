@@ -119,7 +119,7 @@ omcNumber.setParseAction(convertNumbers)
 def parseString(string):
     res = omcGrammar.parseString(string)
     if len(res) == 0:
-      return
+        return
     return res[0]
 
 
