@@ -1,5 +1,6 @@
 import os
 import sys
+import pathlib
 import subprocess
 import pkg_resources
 from OMPython import ModelicaSystem
@@ -8,9 +9,13 @@ from OMPython import ModelicaSystem
 modelName = "BouncingBall"
 fn = pkg_resources.resource_filename(__name__, "BouncingBall.mo")
 mosfn = fn + 's'
-xmlfn_global = pkg_resources.resource_filename(
+# xmlfn_global = pkg_resources.resource_filename(
+#         __name__,
+#         os.path.join("..", "build") + "/" + modelName + "_init.xml"
+#     )
+runpath_global = pkg_resources.resource_filename(
         __name__,
-        os.path.join("..", "build") + "/" + modelName + "_init.xml"
+        os.path.join("..", "build")
     )
 
 
@@ -39,19 +44,34 @@ def buildmodel(modelName):
     return r
 
 
-def instantiatemodel(use_local=True, force_executable_path=None):
-    if use_local:
-        xmlfn = pkg_resources.resource_filename(
-                __name__,
-                os.path.join("..", "build", modelName + "_init.xml")
-            )
-    else:
-        xmlfn = xmlfn_global
-    if force_executable_path is not None:
-        xmlfn = os.path.join(force_executable_path, modelName + "_init.xml")
+def instantiatemodel(modelName, use_local=True, force_executable_path=None):
+    if isinstance(use_local, bool):
+        if use_local:
+            xmlfn = pkg_resources.resource_filename(
+                    __name__,
+                    os.path.join("..", "build", modelName + "_init.xml")
+                )
+            runpath = pkg_resources.resource_filename(
+                    __name__,
+                    os.path.join("..", "build")
+                )
+            runpath = pathlib.Path(runpath).resolve().absolute()
+        else:
+            runpath = pathlib.Path(runpath_global).resolve().absolute()
+    elif isinstance(use_local, str):
+        runpath = pathlib.Path(use_local).resolve().absolute()
+
+    # mod = ModelicaSystem(
+    #         fileName=fn, modelName=modelName,
+    #         xmlFileName=xmlfn
+            
+    #     )
     mod = ModelicaSystem(
-            fileName=fn, modelName=modelName,
-            xmlFileName=xmlfn
+            # fileName=fn,
+            modelName=modelName,
+            customBuildDirectory=runpath,
+            session='none',
+            build=False,
         )
-    print("fn:" + fn + " xmlfn:" + xmlfn)
+    print(str(runpath))
     return mod
