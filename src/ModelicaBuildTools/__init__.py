@@ -45,6 +45,7 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
                 # shutil.move(f, destination_folder)
                 copyinfo = "Copy " + str(f) + " -> " + destination_folder + "\n"
                 info_str += copyinfo
+                # print(copyinfo)
                 shutil.copy(f, destination_folder)
                 os.remove(os.path.join(cwd, f))
 
@@ -56,6 +57,7 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
             omc_lib_files_list = os.listdir(omc_lib_path)
             if 'libSimulationRuntimeC' in str(omc_lib_files_list):
                 break
+        # omc_lib_path = os.path.join(sys.prefix, 'lib', 'omc')
         omc_lib_files_list = [os.path.join(omc_lib_path, f) for f in os.listdir(omc_lib_path)]
         omc_lib_files_list = [f for f in omc_lib_files_list if os.path.isfile(f)]
         if len(omc_lib_files_list) == 0:
@@ -65,6 +67,7 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
             lib_files_list = [os.path.join(build_lib_path, f) for f in os.listdir(build_lib_path)]
             lib_files_list = [f for f in lib_files_list if (os.path.isfile(f) and (('libstdc++' in f) or ('libopenblas' in f) or ('libblas' in f) or ('libnghttp' in f) or ('libquadmath' in f) or ('libgfortran' in f) or ('libss' in f) or ('crypto' in f) or ('libcurl' in f) or ('liblapack' in f)))]
             omc_lib_files_list += lib_files_list
+        # omc_lib_dest_dir = os.path.join(setup_dir, 'omcsimruntime')
         omc_lib_dest_dir = destination_folder
         for f in omc_lib_files_list:
             #print(f)
@@ -76,5 +79,12 @@ def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=Tr
             info_str += copyinfo
             shutil.copy(f, omc_lib_dest_dir)
 
+    '''
+    if 'libopenblas' not in str(omc_lib_files_list):
+        raise FileNotFoundError(
+            errno.ENOENT,
+            os.strerror(errno.ENOENT),
+            'libSimulationRuntimeC not found at the expected location. Found this: ' + str(omc_lib_files_list) +'\n' + 'And that:' + str(os.listdir(os.path.join(sys.prefix, 'lib'))))
+    '''
     # return mod
     return info_str

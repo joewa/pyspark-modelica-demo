@@ -2,7 +2,8 @@ import os
 import subprocess
 import sys
 import pkg_resources
-from OMPython import ModelicaSystem
+# from OMPython import ModelicaSystem
+from OMPython.OMRunner import ModelicaSystemRunner
 
 
 # modelName = "EDrives.Examples.DCDC.DC_Drive_Switching"
@@ -17,9 +18,9 @@ def get_mosfn(modelName):
         modelName + ".mos"
         )
 
-xmlfn_global = pkg_resources.resource_filename(
+runpath_global = pkg_resources.resource_filename(
         __name__,
-        os.path.join("..", "build") + "/" + "MYMODEL" + "_init.xml"
+        os.path.join("..", "build")
     )
 
 
@@ -60,20 +61,19 @@ def buildmodel(modelName):
 
 def instantiatemodel(modelName, use_local=True):
     if use_local:
-        xmlfn = pkg_resources.resource_filename(
+        runpath = pkg_resources.resource_filename(
                 __name__,
-                # os.path.join("..", "build", modelName) + "/" + modelName + "_init.xml"
-                os.path.join("..", "build", modelName + "_init.xml")
+                os.path.join("..", "build")
             )
     else:
-        xmlfn = xmlfn_global.replace("MYMODEL", modelName)
-    if not os.path.isfile(xmlfn): 
-        xmlfn = "./" + modelName + "_init.xml"
-        if not os.path.isfile(xmlfn):
-            raise FileNotFoundError("{}".format(str(xmlfn)))
+        runpath = runpath_global.replace("MYMODEL", modelName)
+    # if not os.path.isfile(xmlfn): 
+    #     xmlfn = "./" + modelName + "_init.xml"
+    #     if not os.path.isfile(xmlfn):
+    #         raise FileNotFoundError("{}".format(str(xmlfn)))
 
-    mod = ModelicaSystem(
-            fileName=fn, modelName=modelName,
-            xmlFileName=xmlfn
+    mod = ModelicaSystemRunner(
+            modelname=modelName,
+            runpath=runpath,
         )
     return mod

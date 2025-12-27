@@ -17,9 +17,10 @@ source:
 
 requirements:
   build:
-    - python
+    - python 3.10
     - setuptools
-    - omcompiler
+    - omcompiler 1.24
+    - omsl 3.2.3         # OpenModelica Standard Library
     - libiconv           # required by omcompiler (if not already present on the host)
     - gcc_linux-64       # required by omcompiler (if not already present on the host)
     - gxx_linux-64       # required by omcompiler (if not already present on the host)
@@ -31,7 +32,7 @@ requirements:
     - pyparsing
     - numpy 1.23.5
     - pandas
-    - omsl 3.2.3
+    - sysroot_linux-64 2.17 
 
   run:
     - python

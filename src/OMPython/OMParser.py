@@ -32,14 +32,10 @@
  Version: 1.0
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from builtins import int, range
-
 import sys
+from typing import Dict, Any
 
-result = dict()
+result: Dict[str, Any] = dict()
 
 inner_sets = []
 next_set_list = []
@@ -207,8 +203,6 @@ def delete_elements(strings):
 
 
 def make_subset_sets(strings, name):
-    index = 0
-    anchor = 0
     main_set_name = "SET1"
     subset_name = "Subset1"
     set_name = "Set1"
@@ -285,8 +279,6 @@ def make_subset_sets(strings, name):
 def make_sets(strings, name):
     if strings == "{}":
         return
-    index = 0
-    anchor = 0
     main_set_name = "SET1"
     set_name = "Set1"
 
@@ -415,7 +407,6 @@ def get_inner_sets(strings, for_this, name):
 
 
 def make_elements(strings):
-    original_string = strings
     index = 0
     main_set_name = "SET1"
 
@@ -477,15 +468,13 @@ def make_elements(strings):
                     skip_start = index + 1
                     if strings[skip_start] == "{":
                         skip_brace += 1
-                        indx = skip_start
-                        while indx < len(strings):
-                            char = strings[indx]
+                        for i in range(skip_start, len(strings)):
+                            char = strings[i]
                             if char == "}":
                                 skip_brace -= 1
                                 if skip_brace == 0:
-                                    index = indx + 1
+                                    index = i + 1
                                     break
-                            indx += 1
 
                 index += 1
 
@@ -532,21 +521,21 @@ def make_elements(strings):
 
 
 def check_for_next_string(next_string):
-    anchorr = 0
-    positionn = 0
-    stopp = 0
+    anchor = 0
+    position = 0
+    stop = 0
 
     # remove braces & keep only the SET's values
-    while positionn < len(next_string):
-        check_str = next_string[positionn]
+    while position < len(next_string):
+        check_str = next_string[position]
         if check_str == "{":
-            anchorr = positionn
+            anchor = position
         elif check_str == "}":
-            stopp = positionn
-            delStr = next_string[anchorr:stopp + 1]
+            stop = position
+            delStr = next_string[anchor:stop + 1]
             next_string = next_string.replace(delStr, '')
-            positionn = -1
-        positionn += 1
+            position = -1
+        position += 1
 
         if isinstance(next_string, str):
             if len(next_string) == 0:
@@ -563,7 +552,6 @@ def get_the_set(string):
         max_count = main_count
         last_set = 0
         last_subset = 0
-        last_brace = 0
         pos = position
 
         while pos < len(string):
@@ -616,7 +604,6 @@ def get_the_set(string):
                                 break
                         elif ch == "(":
                             brace_count += 1
-                            brace_start = position
                             position += 1
                             while position < end_of_main_set:
                                 s = string[position]
@@ -625,19 +612,16 @@ def get_the_set(string):
                                 elif s == ")":
                                     brace_count -= 1
                                     if brace_count == 0:
-                                        last_brace = position
                                         break
                                 elif s == "=" and string[position + 1] == "{":
-                                    indx = position + 2
                                     skip_brace = 1
-                                    while indx < end_of_main_set:
-                                        char = string[indx]
+                                    for i in range(position + 2, end_of_main_set):
+                                        char = string[i]
                                         if char == "}":
                                             skip_brace -= 1
                                             if skip_brace == 0:
-                                                position = indx + 1
+                                                position = i + 1
                                                 break
-                                        indx += 1
                                 position += 1
                         position += 1
                 elif char == "{" and string[position + 1] == "{":
@@ -672,7 +656,6 @@ def get_the_set(string):
                                 break
                         elif ch == "(":
                             brace_count += 1
-                            brace_start = position
                             position += 1
                             while position < end_of_main_set:
                                 s = string[position]
@@ -681,13 +664,11 @@ def get_the_set(string):
                                 elif s == ")":
                                     brace_count -= 1
                                     if brace_count == 0:
-                                        last_brace = position
                                         break
                                 position += 1
                         position += 1
                 elif char == "(":
                     brace_count += 1
-                    brace_start = position
                     position += 1
                     while position < end_of_main_set:
                         s = string[position]
@@ -696,7 +677,6 @@ def get_the_set(string):
                         elif s == ")":
                             brace_count -= 1
                             if brace_count == 0:
-                                last_brace = position
                                 break
                         position += 1
 
@@ -909,3 +889,15 @@ def check_for_values(string):
             check_for_values(next_set)
 
     return result
+
+
+# TODO: hack to be able to use one entry point which also resets the (global) variable results
+#       this should be checked such that the content of this file can be used as class with correct handling of
+#       variable usage
+def om_parser_basic(string: str):
+    result_return = check_for_values(string=string)
+
+    global result
+    result = {}
+
+    return result_return
