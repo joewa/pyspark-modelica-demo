@@ -8,6 +8,11 @@ import setuptools.command.build_py
 import setuptools.command.build_ext
 import pkg_resources
 from ModelicaBuildTools import build_script
+
+from unittest.mock import MagicMock
+# Create a dummy module so the import of zmq in OMPython doesn't fail
+sys.modules["zmq"] = MagicMock()
+
 from MM import BouncingBall
 from MM import EDrives
 

@@ -3,7 +3,8 @@ import sys
 import pathlib
 import subprocess
 import pkg_resources
-from OMPython import ModelicaSystem
+# from OMPython import ModelicaSystem
+from OMPython.OMRunner import ModelicaSystemRunner
 
 
 modelName = "BouncingBall"
@@ -44,7 +45,7 @@ def buildmodel(modelName):
     return r
 
 
-def instantiatemodel(modelName, use_local=True, force_executable_path=None):
+def instantiatemodel(modelName, use_local=True):
     if isinstance(use_local, bool):
         if use_local:
             xmlfn = pkg_resources.resource_filename(
@@ -61,17 +62,10 @@ def instantiatemodel(modelName, use_local=True, force_executable_path=None):
     elif isinstance(use_local, str):
         runpath = pathlib.Path(use_local).resolve().absolute()
 
-    # mod = ModelicaSystem(
-    #         fileName=fn, modelName=modelName,
-    #         xmlFileName=xmlfn
-            
-    #     )
-    mod = ModelicaSystem(
+    mod = ModelicaSystemRunner(
             # fileName=fn,
-            modelName=modelName,
-            customBuildDirectory=runpath,
-            session='none',
-            build=False,
+            modelname=modelName,
+            runpath=runpath,
         )
     print(str(runpath))
     return mod
