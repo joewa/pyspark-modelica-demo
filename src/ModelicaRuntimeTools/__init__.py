@@ -73,7 +73,7 @@ def run_sim_parametric(
     print(pdf.head(5))
     temp_dir = tempfile.gettempdir()
     grp = pdf['run_key'].iloc[0]
-    resfilename = mod.modelName + '_' + grp + '.mat'
+    resfilename = mod._model_name + '_' + grp + '.mat'
     resfilepathname = os.path.join(temp_dir, resfilename)
     # mod.setParameters(pdf['modifiers'].iloc[0])  # Seems to be not implemented in OMPython
     # We might need to encode the dictonary as json when using pyspark
@@ -107,7 +107,7 @@ def run_sim_parametric(
         # print(str(['time']+list(mod.getInputs().keys())))
         pdf = pdf[['time']+list(mod.getInputs().keys())]
         # Write csv file and tell the model class
-        mod.csvFile = os.path.join(temp_dir, mod.modelName + '_' + grp + '_inputs.csv')
+        mod.csvFile = os.path.join(temp_dir, mod._model_name + '_' + grp + '_inputs.csv')
         print("Dropping CSV to {}".format(str(mod.csvFile)))
         pdf.to_csv(mod.csvFile, sep=',', lineterminator=',\n')
         print("Dropped CSV")
