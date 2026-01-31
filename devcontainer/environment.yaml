@@ -1,0 +1,33 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  # Python generic environment
+  - python=3.13
+  - requests
+  - numpy
+  - pandas
+  #- openjdk=17
+  #- pyspark
+  - jupyter
+  - plotly
+  - ipywidgets
+  - matplotlib
+  - ipympl
+  - pip
+  - conda
+  - mamba
+  - omcompiler
+  - scipy
+  - openssh  # for remote connections
+  # Build tools required by OMCompiler to generate simulations
+  - libiconv           # required by omcompiler (if not already present on the host)
+  - gcc_linux-64       # required by omcompiler (if not already present on the host)
+  - gxx_linux-64       # required by omcompiler (if not already present on the host)
+  - gfortran_linux-64  # required by omcompiler (if not already present on the host)
+  - make               # required by omcompiler (if not already present on the host)
+  - cmake              # required by omcompiler (if not already present on the host)
+  - future
+  - psutil
+  - pyparsing
+  # - binutils
