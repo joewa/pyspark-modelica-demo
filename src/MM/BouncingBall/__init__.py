@@ -2,31 +2,24 @@ import os
 import sys
 import pathlib
 import subprocess
-import pkg_resources
-# from OMPython import ModelicaSystem
+import importlib.resources
 from OMPython.OMRunner import ModelicaSystemRunner
 
-
 modelName = "BouncingBall"
-fn = pkg_resources.resource_filename(__name__, "BouncingBall.mo")
-mosfn = fn + 's'
-# xmlfn_global = pkg_resources.resource_filename(
-#         __name__,
-#         os.path.join("..", "build") + "/" + modelName + "_init.xml"
-#     )
-runpath_global = pkg_resources.resource_filename(
-        __name__,
-        os.path.join("..", "build")
-    )
 
+# Locate BouncingBall.mo within the current package
+package_files = importlib.resources.files(__package__)
+fn = str(package_files.joinpath("BouncingBall.mo"))
+mosfn = fn + 's'
+
+# Locate the build directory relative to the current package
+# (Goes up one level to 'MM', then into 'build')
+runpath_global = str(package_files.joinpath("..", "build").resolve())
 
 def create_mos_file():
-    mos_file = open(mosfn, 'w', 1)
-    mos_file.write('loadFile("' + fn + '");\n')
-    # mos_file.write('setComponentModifierValue(CalledbyPython,b,$Code(="+str(newb)+"));\n')
-    mos_file.write('buildModel(' + modelName + ');\n')
-    mos_file.close()
-    pass
+    with open(mosfn, 'w') as mos_file:
+        mos_file.write(f'loadFile("{fn}");\n')
+        mos_file.write(f'buildModel({modelName});\n')
 
 
 def run_mos_file():
@@ -48,24 +41,16 @@ def buildmodel(modelName):
 def instantiatemodel(modelName, use_local=True):
     if isinstance(use_local, bool):
         if use_local:
-            xmlfn = pkg_resources.resource_filename(
-                    __name__,
-                    os.path.join("..", "build", modelName + "_init.xml")
-                )
-            runpath = pkg_resources.resource_filename(
-                    __name__,
-                    os.path.join("..", "build")
-                )
-            runpath = pathlib.Path(runpath).resolve().absolute()
+            # Locate build artifacts using importlib
+            runpath = str(package_files.joinpath("..", "build").resolve())
         else:
-            runpath = pathlib.Path(runpath_global).resolve().absolute()
+            runpath = str(pathlib.Path(runpath_global).resolve().absolute())
     elif isinstance(use_local, str):
-        runpath = pathlib.Path(use_local).resolve().absolute()
+        runpath = str(pathlib.Path(use_local).resolve().absolute())
 
     mod = ModelicaSystemRunner(
-            # fileName=fn,
             modelname=modelName,
             runpath=runpath,
         )
-    print(str(runpath))
+    print(f"Runpath: {runpath}")
     return mod

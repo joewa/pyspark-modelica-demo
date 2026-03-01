@@ -17,7 +17,7 @@ source:
 
 requirements:
   build:
-    - python 3.10
+    - python 3.12
     - setuptools
     - omcompiler 1.24
     - omsl 3.2.3         # OpenModelica Standard Library
@@ -30,7 +30,7 @@ requirements:
     - future
     - psutil
     - pyparsing
-    - numpy 1.23.5
+    - numpy #1.23.5
     - pandas
     - sysroot_linux-64 2.17 
 

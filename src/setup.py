@@ -6,7 +6,6 @@ import distutils.cmd
 import setuptools
 import setuptools.command.build_py
 import setuptools.command.build_ext
-import pkg_resources
 from ModelicaBuildTools import build_script
 
 from unittest.mock import MagicMock
@@ -18,7 +17,7 @@ from MM import EDrives
 
 
 suffix = '.so'
-SETUP_DIR = pkg_resources.resource_filename(__name__, ".")
+SETUP_DIR = os.path.abspath(os.path.dirname(__file__))
 omc_lib_path = os.path.join(SETUP_DIR, 'omcsimruntime')
 
 

@@ -3,7 +3,7 @@ import pandas as pd
 
 # sys.path.insert(0, '../../src')
 from ModelicaRuntimeTools import get_sim_dist_func
-from ModelicaModels import BouncingBall
+from MM import BouncingBall
 
 
 def run_bouncingball_pandas(parameters_var_df) -> pd.DataFrame:

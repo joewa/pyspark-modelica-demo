@@ -1,5 +1,9 @@
 import pandas as pd
 import json
+import sys
+from unittest.mock import MagicMock
+# Create a dummy module so the import of zmq in OMPython doesn't fail
+sys.modules["zmq"] = MagicMock()
 import TestBouncingBall
 
 

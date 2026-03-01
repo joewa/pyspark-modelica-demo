@@ -1,27 +1,20 @@
 import os
 import subprocess
 import sys
-import pkg_resources
+# import importlib.resources # Changed
+from importlib.resources import files
 # from OMPython import ModelicaSystem
 from OMPython.OMRunner import ModelicaSystemRunner
 
 
 # modelName = "EDrives.Examples.DCDC.DC_Drive_Switching"
-fn = pkg_resources.resource_filename(
-    __name__,
-    os.path.join("EDrives", "package.mo")
-    )
+package_files = files(__package__)
+fn = str(package_files.joinpath("EDrives", "package.mo"))
 
 def get_mosfn(modelName):
-    return pkg_resources.resource_filename(
-        __name__,
-        modelName + ".mos"
-        )
+    return str(files(__name__).joinpath(modelName + ".mos"))
 
-runpath_global = pkg_resources.resource_filename(
-        __name__,
-        os.path.join("..", "build")
-    )
+runpath_global = str(files(__name__).joinpath("..", "build"))
 
 
 def create_mos_file(mofile, modelName, mosfn, install_msl=False, load_msl=False):
@@ -61,10 +54,7 @@ def buildmodel(modelName):
 
 def instantiatemodel(modelName, use_local=True):
     if use_local:
-        runpath = pkg_resources.resource_filename(
-                __name__,
-                os.path.join("..", "build")
-            )
+        runpath = str(files(__name__).joinpath("..", "build"))
     else:
         runpath = runpath_global.replace("MYMODEL", modelName)
     # if not os.path.isfile(xmlfn): 

@@ -1,0 +1,20 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  # Python generic environment
+  - python=3.12
+  - openjdk=17
+  - openssh
+  - libiconv
+  - pip
+  # Let pip handle the Python packages to save gigabytes of RAM
+  - pip:
+    - requests
+    - numpy<2.0.0
+    - pandas
+    - pyspark<4.0.0
+    - scipy
+    - future
+    - psutil
+    - pyparsing

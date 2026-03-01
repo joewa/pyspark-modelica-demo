@@ -1,11 +1,11 @@
-import pkg_resources
+import importlib.resources
 import os
 import sys
 import shutil
 import errno
 
-
-SETUP_DIR = pkg_resources.resource_filename(__name__, "../")
+# Gets the path of this package and goes up one level to the project root
+SETUP_DIR = str(importlib.resources.files(__package__).joinpath("..").resolve())
 
 
 def build_script(modelwrapper, modelName, cwd=None, cleanup=False, copy_files=True):
