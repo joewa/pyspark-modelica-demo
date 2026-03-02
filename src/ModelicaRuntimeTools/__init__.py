@@ -64,6 +64,7 @@ def run_sim_parametric(
             modelwrapper = importlib.import_module(modelwrapper_name)
             mod = modelwrapper.instantiatemodel(model_name, use_local=False)
     log_str = ''
+    print(str(pdf.columns))
     if not 'run_key' in pdf.columns:  # Handle weird pandas behavior
         return
     print("Group: {}".format(pdf['run_key'].iloc[0]))
